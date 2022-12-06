@@ -1,0 +1,9 @@
+# YOUR vMANAGE CREDENTIALS
+VMANAGE: vmanage-test.viptela.net
+PORT: 443
+USERNAME: admin
+PASSWORD: password123
+
+# WEBEX TOKEN: https://developer.webex.com/docs/getting-started
+WEBEX_TOKEN: 'yourwebextoken1234567890'
+RECIPIENT: 'example@email.com'
