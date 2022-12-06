@@ -8,9 +8,9 @@ def send_message(message):
    
    var = load_yaml_config('config/config.yaml')
    TOKEN = var.get('WEBEX_TOKEN')
-   recipient = var.get('RECIPIENT')
+   EMAIL = var.get('RECIPIENT')
    webex = WebexTeamsAPI(TOKEN)
-   webex.messages.create(markdown=message,toPersonEmail=recipient)
+   webex.messages.create(text=message,toPersonEmail=EMAIL)
    print(f'Message sent!')
 
 app = FastAPI()
