@@ -24,7 +24,7 @@ Edit File to provide the connection details to your environment
 
 1. Report Example
 
-This script will send a set of API calls to vmanage and collect information and create a report txt file with the general health of the network
+This script will send a set of API calls to vmanage to collect information and create a report txt file with the general health of the network
 
     usage: report_example.py [-h] [--devices DEVICES] [--action {health_check,alarms,reachable,all}] [--hours HOURS] [--severity {Critical,Major,Medium,Minor}] [--verbose]
 
