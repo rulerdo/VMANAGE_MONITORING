@@ -1,5 +1,5 @@
-from modules.parse_manager import add_output, load_yaml_config, get_arguments,get_alarms_single_device,get_timestamp,confirm_is_IP
-from modules.sdwan_manager import sdwan_manager
+from modules.parser import add_output, load_yaml_config, get_arguments,get_alarms_single_device,get_timestamp,confirm_is_IP
+from modules.vmanage import sdwan_manager
 
 if __name__ == '__main__':
 

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from webexteamssdk import WebexTeamsAPI
-from modules.parse_manager import load_yaml_config
+from modules.parser import load_yaml_config
 import json
 
 

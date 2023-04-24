@@ -4,6 +4,8 @@ import json
 from tabulate import tabulate
 from datetime import datetime
 from ipaddress import ip_address
+import sys
+
 
 def confirm_is_IP(text):
 
@@ -167,8 +169,12 @@ def get_alarms(session, severity, hours, all_devices):
     query = json.dumps({"query": {"condition": "AND","rules": rules_set},"size": 10000})
 
     response = session.send_request('GET',f'/alarms?query={query}',body = {})
-    data = response.json()['data']
-
+    try:
+        data = response.json()['data']
+    except:
+        print(response.text)
+        print(response.status_code)
+        sys.exit(1)
     headers = ['SYSTEM IP','HOSTNAME','RULENAME','MESSAGE','EVENT TIME','SEVERITY']
     alarms_list = []
     
