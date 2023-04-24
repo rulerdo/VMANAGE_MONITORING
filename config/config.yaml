@@ -1,9 +1,9 @@
 # YOUR vMANAGE CREDENTIALS
-VMANAGE: vmanage-1785483.viptela.net
+VMANAGE: vmanage-test.viptela.net
 PORT: 443
-USERNAME: rgomezb
-PASSWORD: C!sc0789
+USERNAME: admin
+PASSWORD: password123
 
 # WEBEX TOKEN: https://developer.webex.com/docs/getting-started
-WEBEX_TOKEN: 'OGMxNThkMjYtNjAwYy00NzcyLWI4YjMtZjNlZThjNTZiY2YxMWQ0YzMyNDMtNWZj_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f'
-RECIPIENT: 'rgomezbe@cisco.com'
+WEBEX_TOKEN: 'yourwebextoken1234567890'
+RECIPIENT: 'example@email.com'
