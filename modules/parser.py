@@ -33,9 +33,8 @@ def get_arguments():
 
     parser = ArgumentParser(description='Arguments for custom requests')
     parser.add_argument('--devices', default='All_devices', help='DeviceID for health check, if multiple separate with commas')
-    parser.add_argument('--action', default='all', choices=["health_check", "alarms", "reachable", "all"],  help='Select from the available actions to perform')
     parser.add_argument('--hours', default=24, type=int, help='Filter the alarms based on the last N hours')
-    parser.add_argument('--severity', default='Major', choices=["Critical", "Major", "Medium", "Minor"], help='Filter the alarms based on the severity [Critical, Major, Minor], if multiple separate with commas')
+    parser.add_argument('--severity', default='Major', choices=["Critical", "Major", "Medium", "Minor"], help='Filter the alarms based on the severity [Critical, Major, Medium, Minor], if multiple separate with commas')
     parser.add_argument('--verbose', action="store_true", help="Print Results on Terminal")
     arguments = parser.parse_args()
 
@@ -54,24 +53,6 @@ def load_yaml_config(config_file):
     return variables
 
 
-def get_all_reachable_devices(session,headers):
-
-    response = session.send_request('GET','/device',body = {})
-    data = response.json()['data']
-
-    all_reachable_devices = list()
-    for element in data:
-        new_row = list()
-        for k,v in element.items():
-            if k in headers:
-                new_row.append(v)
-
-        if 'unreachable' not in new_row:
-            all_reachable_devices.append(new_row)
-
-    return all_reachable_devices
-
-
 def get_all_cloud_edges(all_reachable_devices):
 
     all_cloud_edges = list()
@@ -80,38 +61,6 @@ def get_all_cloud_edges(all_reachable_devices):
             all_cloud_edges.append(line)
 
     return all_cloud_edges
-
-
-def get_devices_status(session,devices,all_reachable_devices):
-
-    if devices == 'All_devices':
-        cloud_edges = get_all_cloud_edges(all_reachable_devices)
-    else:
-        cloud_edges = [[device] for device in devices.split(',')]
-    
-    headers = ['SYSTEM IP', 'HOSTNAME', 'UP TIME', 'MEM USE', 'DISK USE','CPU USE']
-    table = [headers]
-
-    for line in cloud_edges:
-
-        try:
-            deviceID = line[0]
-            response = session.send_request('GET',f'/device/system/status?deviceId={deviceID}',body = {})
-            data = response.json()['data'][0]
-            mem_use = str(round(int(data['mem_used']) * 100 / int(data['mem_total']),2)) + ' %'
-            disk_use = data['disk_use'] + ' %'
-            cpu_use = str(round(100 - float(data['cpu_idle']),2)) + ' %'
-            new_row = [data['vdevice-name'], data['vdevice-host-name'], data['uptime'],mem_use, disk_use, cpu_use]
-
-        except:
-            deviceIDerror = deviceID[0] + '*'
-            new_row = [deviceIDerror]
-            for _ in range(len(headers)-1):
-                new_row.append(None)
-
-        table.append(new_row)
-
-    return table
 
 
 def get_hostnames_from_systemIPs(systemIPs,all_reachable_devices):
@@ -123,6 +72,7 @@ def get_hostnames_from_systemIPs(systemIPs,all_reachable_devices):
                 devices_names[line] = row[1]
 
     return devices_names
+
 
 def get_alarms_single_device(session, severity, hours, device):
     
@@ -212,7 +162,7 @@ def get_alarms(session, severity, hours, all_devices):
     return alarms_table, summary_table
 
 
-def get_table(list,headers):
+def table_format(list,headers):
     return tabulate(list,headers=headers,tablefmt='pretty')
 
 

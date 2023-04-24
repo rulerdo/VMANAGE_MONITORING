@@ -77,3 +77,48 @@ class sdwan_manager():
 
         message = 'vManage session closed!' if response.status_code == 200 else 'Problems closing session'
         print(message)
+
+
+    def get_all_reachable_devices(self,headers):
+
+        response = self.send_request('GET','/device',body = {})
+        data = response.json()['data']
+
+        all_reachable_devices = list()
+        for element in data:
+            new_row = list()
+            for k,v in element.items():
+                if k in headers:
+                    new_row.append(v)
+
+            if 'unreachable' not in new_row:
+                all_reachable_devices.append(new_row)
+
+        return all_reachable_devices
+
+
+    def get_devices_status(self,all_reachable_devices):
+        
+        headers = ['SYSTEM IP', 'HOSTNAME', 'UP TIME', 'MEM USE', 'DISK USE','CPU USE']
+        status_table = [headers]
+
+        for line in all_reachable_devices:
+
+            try:
+                deviceID = line[0]
+                response = self.send_request('GET',f'/device/system/status?deviceId={deviceID}',body = {})
+                data = response.json()['data'][0]
+                mem_use = str(round(int(data['mem_used']) * 100 / int(data['mem_total']),2)) + ' %'
+                disk_use = data['disk_use'] + ' %'
+                cpu_use = str(round(100 - float(data['cpu_idle']),2)) + ' %'
+                new_row = [data['vdevice-name'], data['vdevice-host-name'], data['uptime'],mem_use, disk_use, cpu_use]
+
+            except:
+                deviceIDerror = deviceID[0] + '*'
+                new_row = [deviceIDerror]
+                for _ in range(len(headers)-1):
+                    new_row.append(None)
+
+            status_table.append(new_row)
+
+        return status_table
