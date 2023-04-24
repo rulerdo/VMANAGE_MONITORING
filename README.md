@@ -22,9 +22,9 @@ Edit File to provide the connection details to your environment
 
 ## Scripts
 
-1. Device Health
+### Device Health
 
-    Script to collect a general health status of all the devices on an SDWAN overlay
+Script to collect a general health status of all the devices on an SDWAN overlay
 
     usage: device_health.py [-h] [--devices DEVICES] [--hours HOURS] [--severity {Critical,Major,Medium,Minor}] [--verbose]
 
@@ -38,9 +38,9 @@ Edit File to provide the connection details to your environment
                             Filter the alarms based on the severity [Critical, Major, Medium, Minor], if multiple separate with commas
     --verbose             Print Results on Terminal
 
-2. Events Collector
+### Events Collector
 
-    This script will collect all the events from vManage
+This script will collect all the events from vManage
 
     usage: events_collector.py [-h] [--devices DEVICES] [--eventnames EVENTNAMES] [--components COMPONENTS] [--hours HOURS] [--severities SEVERITIES]
                             [--maxresults MAXRESULTS] [--showdevices] [--showevents] [--showcomponents]
@@ -63,13 +63,13 @@ Edit File to provide the connection details to your environment
     --showevents          Print available event names on terminal
     --showcomponents      Print available components system IPs on terminal
 
-3. Webhook Example
+### Webhook Example
 
-    This script is to enable a server to receive webhook notifications from vManage, it will receive the messages and send them back to the user via a Webex Message
+This script is to enable a server to receive webhook notifications from vManage, it will receive the messages and send them back to the user via a Webex Message
 
     uvicorn webhook_example:app --host 0.0.0.0
 
-    Expected endpoint: /webhook
+Expected endpoint: /webhook
 
 ## References
 
