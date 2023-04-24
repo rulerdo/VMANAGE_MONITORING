@@ -130,3 +130,6 @@ dmypy.json
 
 # pycache
 /__pycache__/
+
+# output folder
+outputs/sdwan_device_health_report*

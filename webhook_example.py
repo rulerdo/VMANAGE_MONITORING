@@ -1,16 +1,13 @@
 from fastapi import FastAPI, Request
 from webexteamssdk import WebexTeamsAPI
-from modules.parser import load_yaml_config
-import json
+import os
 
 
 def send_message(message):
-   
-   var = load_yaml_config('config/config.yaml')
-   TOKEN = var.get('WEBEX_TOKEN')
-   EMAIL = var.get('RECIPIENT')
+   TOKEN = os.environ.get('WEBEX_TOKEN')
+   recipient = 'rgomezbe@cisco.com'
    webex = WebexTeamsAPI(TOKEN)
-   webex.messages.create(text=message,toPersonEmail=EMAIL)
+   webex.messages.create(markdown=message,toPersonEmail=recipient)
    print(f'Message sent!')
 
 app = FastAPI()
@@ -20,10 +17,12 @@ async def webhook(request: Request):
 
    try:
       payload = await request.json()
-      message = json.dumps(payload)
+      data = [f'{k} : {v}' for k,v in payload.items()]
+      message = '\n'.join(data)
       _ = send_message(message)
 
-   except:
-      _ = send_message('No payload!')
+   except Exception as e:
+      _ = send_message('Error processing message from vManage!')
+      print(e)
 
    return {'ack': True}
