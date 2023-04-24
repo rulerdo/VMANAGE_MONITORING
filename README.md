@@ -12,7 +12,7 @@ Clone repository and use pip to install requirements
 
 ## Configuration
 
-There is a configuration files under config folder
+There is a configuration file under config folder
 
     .
     ├─ config/
@@ -22,41 +22,58 @@ Edit File to provide the connection details to your environment
 
 ## Scripts
 
-1. Report Example
+1. Device Health
 
-This script will send a set of API calls to vmanage to collect information and create a report txt file with the general health of the network
+    Script to collect a general health status of all the devices on an SDWAN overlay
 
-    usage: report_example.py [-h] [--devices DEVICES] [--action {health_check,alarms,reachable,all}] [--hours HOURS] [--severity {Critical,Major,Medium,Minor}] [--verbose]
+    usage: device_health.py [-h] [--devices DEVICES] [--hours HOURS] [--severity {Critical,Major,Medium,Minor}] [--verbose]
 
     Arguments for custom requests
 
     optional arguments:
     -h, --help            show this help message and exit
     --devices DEVICES     DeviceID for health check, if multiple separate with commas
-    --action {health_check,alarms,reachable,all}
-                            Select from the available actions to perform
     --hours HOURS         Filter the alarms based on the last N hours
     --severity {Critical,Major,Medium,Minor}
-                            Filter the alarms based on the severity [Critical, Major, Minor], if multiple separate with commas
+                            Filter the alarms based on the severity [Critical, Major, Medium, Minor], if multiple separate with commas
     --verbose             Print Results on Terminal
 
-2. Webhook Example
+2. Events Collector
 
-This script is to enable a server to receive webhook notifications from vManage, it will receive the messages and send them back to the user via a Webex Message
+    This script will collect all the events from vManage
+
+    usage: events_collector.py [-h] [--devices DEVICES] [--eventnames EVENTNAMES] [--components COMPONENTS] [--hours HOURS] [--severities SEVERITIES]
+                            [--maxresults MAXRESULTS] [--showdevices] [--showevents] [--showcomponents]
+
+    Arguments to filter collected events
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    --devices DEVICES     System IP to filter, if multiple separate with commas
+    --eventnames EVENTNAMES
+                            Event name to filter, if multiple separate with comma
+    --components COMPONENTS
+                            Components name to filter, if multiple separate with comma
+    --hours HOURS         Filter the events based on the last N hours 1 day = 24 ; 1 week = 168
+    --severities SEVERITIES
+                            Severity to filter, if multiple separate with commas [Critical, Major, , Medium, Minor]
+    --maxresults MAXRESULTS
+                            Maximum number of results to collect
+    --showdevices         Print available devices system IPs on terminal
+    --showevents          Print available event names on terminal
+    --showcomponents      Print available components system IPs on terminal
+
+3. Webhook Example
+
+    This script is to enable a server to receive webhook notifications from vManage, it will receive the messages and send them back to the user via a Webex Message
 
     uvicorn webhook_example:app --host 0.0.0.0
 
-3. Alarms per Device
-
-This script will collect all the alarms for the device provided, if multiple separate with commas
-
-    python alarms_per_device.py --device 1.1.1.1
-    python alarms_per_device.py --device "1.1.1.1,2.2.2.2"
+    Expected endpoint: /webhook
 
 ## References
 
     https://developer.cisco.com/docs/sdwan/
-
 
 ## Author
 
