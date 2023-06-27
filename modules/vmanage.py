@@ -2,6 +2,7 @@ import requests
 from urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 from time import time
+from alive_progress import alive_bar
 
 
 class sdwan_manager():
@@ -101,24 +102,27 @@ class sdwan_manager():
         
         headers = ['SYSTEM IP', 'HOSTNAME', 'UP TIME', 'MEM USE', 'DISK USE','CPU USE']
         status_table = [headers]
+        
+        with alive_bar(len(all_reachable_devices)) as bar:
 
-        for line in all_reachable_devices:
+            for line in all_reachable_devices:
 
-            try:
-                deviceID = line[0]
-                response = self.send_request('GET',f'/device/system/status?deviceId={deviceID}',body = {})
-                data = response.json()['data'][0]
-                mem_use = str(round(int(data['mem_used']) * 100 / int(data['mem_total']),2)) + ' %'
-                disk_use = data['disk_use'] + ' %'
-                cpu_use = str(round(100 - float(data['cpu_idle']),2)) + ' %'
-                new_row = [data['vdevice-name'], data['vdevice-host-name'], data['uptime'],mem_use, disk_use, cpu_use]
+                try:
+                    deviceID = line[0]
+                    response = self.send_request('GET',f'/device/system/status?deviceId={deviceID}',body = {})
+                    data = response.json()['data'][0]
+                    mem_use = str(round(int(data['mem_used']) * 100 / int(data['mem_total']),2)) + ' %'
+                    disk_use = data['disk_use'] + ' %'
+                    cpu_use = str(round(100 - float(data['cpu_idle']),2)) + ' %'
+                    new_row = [data['vdevice-name'], data['vdevice-host-name'], data['uptime'],mem_use, disk_use, cpu_use]
 
-            except:
-                deviceIDerror = deviceID + '*'
-                new_row = [deviceIDerror]
-                for _ in range(len(headers)-1):
-                    new_row.append(None)
+                except:
+                    deviceIDerror = deviceID + '*'
+                    new_row = [deviceIDerror]
+                    for _ in range(len(headers)-1):
+                        new_row.append(None)
 
-            status_table.append(new_row)
+                status_table.append(new_row)
+                bar()
 
         return status_table
