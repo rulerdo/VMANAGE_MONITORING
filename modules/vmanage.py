@@ -114,7 +114,7 @@ class sdwan_manager():
                 new_row = [data['vdevice-name'], data['vdevice-host-name'], data['uptime'],mem_use, disk_use, cpu_use]
 
             except:
-                deviceIDerror = deviceID[0] + '*'
+                deviceIDerror = deviceID + '*'
                 new_row = [deviceIDerror]
                 for _ in range(len(headers)-1):
                     new_row.append(None)

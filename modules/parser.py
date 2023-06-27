@@ -5,6 +5,7 @@ from tabulate import tabulate
 from datetime import datetime
 from ipaddress import ip_address
 import sys
+import csv
 
 
 def confirm_is_IP(text):
@@ -36,6 +37,7 @@ def get_arguments():
     parser.add_argument('--hours', default=24, type=int, help='Filter the alarms based on the last N hours')
     parser.add_argument('--severity', default='Major', choices=["Critical", "Major", "Medium", "Minor"], help='Filter the alarms based on the severity [Critical, Major, Medium, Minor], if multiple separate with commas')
     parser.add_argument('--verbose', action="store_true", help="Print Results on Terminal")
+    parser.add_argument('--csv', action="store_true", help="Save results on CSV file (Available for device health only)")
     arguments = parser.parse_args()
 
     return arguments
@@ -168,3 +170,15 @@ def table_format(list,headers):
 
 def get_timestamp():
     return datetime.now().strftime('%Y%m%d_%H%M%S')
+
+
+def save_to_csv(table,csv_filename):
+
+    with open(csv_filename,'w') as f:
+
+        writerCSV = csv.writer(f)
+                
+        for line in table:
+            writerCSV.writerow(line)
+    
+    print(f'CSV file saved as: {csv_filename}')

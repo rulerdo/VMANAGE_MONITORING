@@ -50,7 +50,7 @@ def save_csv(filename,data):
                 event["host_name"],
                 event["system_ip"],
                 event["eventname"],
-                event["severity_level"],
+                #event["severity_level"],
                 event["component"],
                 event["details"],
             ]

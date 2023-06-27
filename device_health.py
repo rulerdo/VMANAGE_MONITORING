@@ -1,4 +1,4 @@
-from modules.parser import add_output, load_yaml_config, get_arguments, table_format, get_timestamp
+from modules.parser import add_output, load_yaml_config, get_arguments, table_format, get_timestamp, save_to_csv
 from modules.vmanage import sdwan_manager
 
 
@@ -32,6 +32,10 @@ if __name__ == '__main__':
     # SAVE TO FILE AND / OR PRINT ON TERMINAL
     add_output(report,status_table,'DEVICES STATUS')
     print(status_table,'\n') if args.verbose else ''
+
+    if args.csv:
+        csv_filename = f'outputs/sdwan_device_health_csv_{timestamp}.csv'
+        save_to_csv(devices_status,csv_filename) 
 
     report.close()
     session.logout()
